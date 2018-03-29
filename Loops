@@ -1,0 +1,26 @@
+'BASIC VBA Loops
+Dim C As Integer
+ 
+'Option 1: Do UNTIL condition is TRUE (i.e. checks at end).
+Do
+C = C + 1
+Loop Until C > 10
+ 
+'Option 2: Do WHILE condition is TRUE (i.e. checks at beginning).
+Do While C < 11
+C = C + 1
+Loop
+ 
+'Option 3: Looping in a set of integers (example of 1 to 100).
+'"Step" defaults to +1, but can be any positive or negative integer
+For C = 1 To 100 Step 1
+    Range("A" &  C).VALUE = "BOOM" & C
+Next C
+ 
+'Option 4: Loop within a range.
+Dim rCell As Range
+ 
+For Each rCell In Range("A1:Z100").Cells
+    rCell.clearcontents
+ 
+Next rCell
