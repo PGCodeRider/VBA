@@ -1,0 +1,129 @@
+Function NextHighestPrimeNumber(StartingNumber As Double) As Variant
+Dim CeilingTest As Double
+Dim i As Double
+'PGCodeRider
+'Calculates answer to 10 trillion in 4 seconds on my laptop, which is pretty good.
+
+If StartingNumber < 11 Then
+
+            If StartingNumber > 6 Then
+                NextHighestPrimeNumber = 11
+
+            ElseIf StartingNumber > 4 Then
+                NextHighestPrimeNumber = 7
+
+            ElseIf StartingNumber > 2 Then
+                NextHighestPrimeNumber = 5
+
+            ElseIf StartingNumber > 0 Then
+                NextHighestPrimeNumber = 3
+
+            ElseIf StartingNumber = 0 Then
+                NextHighestPrimeNumber = 1
+
+            Else
+                NextHighestPrimeNumber = "Pick A Positive Integer"
+
+            End If
+
+        Exit Function
+
+Else
+
+'Create Array (Skips 3 and 5 because those are hard coded to check for to save time of calculating unnecassary square roots
+    ReDim prime_array(6) As Double
+        prime_array(0) = 7
+        prime_array(1) = 11
+        prime_array(2) = 13
+        prime_array(3) = 17
+        prime_array(4) = 19
+        prime_array(5) = 23
+        prime_array(6) = 29
+
+    'zz failed code: If StartingNumber Mod 2 = 0 Then if over Long Limit (2.1 billion)
+    
+    If StartingNumber - (Int(StartingNumber / 2) * 2) = 0 Then
+        StartingNumber = StartingNumber - 1
+    End If
+End If
+
+
+NewNumber:
+        StartingNumber = StartingNumber + 2
+
+        If StartingNumber - (Int(StartingNumber / 3) * 3) = 0 Then
+            GoTo NewNumber
+
+        ElseIf StartingNumber - (Int(StartingNumber / 5) * 5) = 0 Then
+            GoTo NewNumber
+
+        Else
+            CeilingTest = Int(VBA.Sqr(StartingNumber))
+        End If
+
+
+'Array loop
+    For i = 0 To UBound(prime_array)
+        If prime_array(i) > CeilingTest Then
+            NextHighestPrimeNumber = StartingNumber
+            Exit Function
+
+        ElseIf StartingNumber - (Int(StartingNumber / prime_array(i)) * prime_array(i)) = 0 Then
+            GoTo NewNumber
+
+        End If
+    Next i
+
+
+ExpandArray:
+    ReDim Preserve prime_array(UBound(prime_array) + 1)
+    prime_array(UBound(prime_array)) = AddArrayFactorMember(prime_array())
+
+
+    If StartingNumber - (Int(StartingNumber / prime_array(UBound(prime_array))) * prime_array(UBound(prime_array))) = 0 Then
+        GoTo NewNumber
+
+    'test if bigger than ceiling
+    ElseIf prime_array(UBound(prime_array)) > CeilingTest Then
+        NextHighestPrimeNumber = StartingNumber
+        Exit Function
+
+    Else
+        GoTo ExpandArray
+    End If
+
+End Function
+
+Private Function AddArrayFactorMember(Old_Array() As Double) As Double
+Dim i As Double
+Dim StartingNumber As Double: StartingNumber = Old_Array(UBound(Old_Array) - 1)
+
+
+NewNumber:
+    StartingNumber = StartingNumber + 2
+    
+    If StartingNumber - (Int(StartingNumber / 3) * 3) = 0 Then
+        GoTo NewNumber
+        
+    ElseIf StartingNumber - (Int(StartingNumber / 5) * 5) = 0 Then
+        GoTo NewNumber
+    
+    Else
+        CeilingTest = Int(VBA.Sqr(StartingNumber))
+        
+    End If
+    
+
+    For i = 0 To UBound(Old_Array)
+        If Old_Array(i) > CeilingTest Then
+            AddArrayFactorMember = StartingNumber
+            Exit Function
+
+        ElseIf StartingNumber - (Int(StartingNumber / Old_Array(i)) * Old_Array(i)) = 0 Then
+            GoTo NewNumber
+            
+        End If
+        
+    Next i
+
+End Function
