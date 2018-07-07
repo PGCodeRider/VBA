@@ -1,0 +1,13 @@
+'64 digit hexidecimal random generator (random by Excel terms)
+'Number can be used as a private key to generate addresses on many cryptocurrency networks including Ethereum and Bitcoin
+'To convert this to a Bitcoin or sibling address consider visiting Bitaddress.org
+'For Ethereum, consider https://www.myetherwallet.com
+'Remember, if you lose your private key... nobody can help you get it back.
+ 
+Function PrivateKeyGenerator() As String
+Dim i As Integer
+For i = 1 To 64
+    PrivateKeyGenerator = Evaluate("=DEC2HEX(RANDBETWEEN(0,15))") & PrivateKeyGenerator
+Next i
+ 
+End Function
